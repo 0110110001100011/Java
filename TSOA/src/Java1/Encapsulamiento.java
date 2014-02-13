@@ -5,8 +5,7 @@ import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 
 /**
- * @author Luis Carlos de la Torre Cortes
- * 
+ * @author Luis Carlos de la Torre Cortes Seccion D03 Tarea Java 1
  */
 public class Encapsulamiento {
 	public static void main(String[] args) {
@@ -60,63 +59,46 @@ class miFecha {
 					|| mes == 10 || mes == 12) {
 				if (nuevo >= 1 && nuevo <= 31) {
 					return true;
-				} else {
-					return false;
 				}
 			} else if (mes == 4 || mes == 6 || mes == 9 || mes == 11) {
 				if (nuevo >= 1 && nuevo <= 30) {
 					return true;
-				} else {
-					return false;
 				}
 			} else if (mes == 2) {
 				if ((anio % 4 == 0 && anio % 100 != 0) || anio % 400 == 0) {
 					if (nuevo >= 1 && nuevo <= 29) {
 						return true;
-					} else {
-						return false;
 					}
 				} else {
 					if (nuevo >= 1 && nuevo <= 28) {
 						return true;
-					} else {
-						return false;
 					}
 				}
-			} else {
-				return false;
 			}
+			return false;
 		case 2:
 			if (nuevo == 1 || nuevo == 3 || nuevo == 5 || nuevo == 7
 					|| nuevo == 8 || nuevo == 10 || nuevo == 12) {
 				if (dia >= 1 && dia <= 31) {
 					return true;
-				} else {
-					return false;
 				}
 			} else if (nuevo == 4 || nuevo == 6 || nuevo == 9 || nuevo == 11) {
 				if (dia >= 1 && dia <= 30) {
 					return true;
-				} else {
-					return false;
 				}
 			} else if (nuevo == 2) {
 				if ((anio % 4 == 0 && anio % 100 != 0) || anio % 400 == 0) {
 					if (dia >= 1 && dia <= 29) {
 						return true;
-					} else {
-						return false;
 					}
 				} else {
 					if (dia >= 1 && dia <= 28) {
 						return true;
-					} else {
-						return false;
 					}
 				}
-			} else {
-				return false;
 			}
+			return false;
+
 		case 3:
 			if (mes == 2) {
 				if ((nuevo % 4 == 0 && nuevo % 100 != 0) || nuevo % 400 == 0) {
@@ -124,11 +106,10 @@ class miFecha {
 				} else {
 					if (dia >= 1 && dia <= 28) {
 						return true;
-					} else {
-						return false;
 					}
 				}
-			} else {
+			}
+			else {
 				return true;
 			}
 		}

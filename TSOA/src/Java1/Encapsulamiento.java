@@ -5,7 +5,9 @@ import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 
 /**
- * @author Luis Carlos de la Torre Cortes Seccion D03 Tarea Java 1
+ * @author Luis Carlos de la Torre Cortes
+ * @Seccion D03
+ * @Tarea Java 1
  */
 public class Encapsulamiento {
 	public static void main(String[] args) {
@@ -16,7 +18,7 @@ public class Encapsulamiento {
 					+ "/" + objeto.dameMes() + "/" + objeto.dameAnio() + "\n"
 					+ "\n1. Cambia Dia\n2. Cambia Mes\n3. Cambia Anio"
 					+ "\nQ. Salir");
-			if (opcion.isEmpty()) {
+			if (opcion == null) {
 				JOptionPane.showMessageDialog(null,
 						"No seleccionaste ninguna opcion");
 			} else {
@@ -34,6 +36,8 @@ public class Encapsulamiento {
 				case "q":
 					System.exit(0);
 					break;
+				default:
+					JOptionPane.showMessageDialog(null, "Opcion incorrecta!");
 				}
 			}
 		}
@@ -98,7 +102,6 @@ class miFecha {
 				}
 			}
 			return false;
-
 		case 3:
 			if (mes == 2) {
 				if ((nuevo % 4 == 0 && nuevo % 100 != 0) || nuevo % 400 == 0) {
@@ -108,8 +111,7 @@ class miFecha {
 						return true;
 					}
 				}
-			}
-			else {
+			} else {
 				return true;
 			}
 		}

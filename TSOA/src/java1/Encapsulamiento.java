@@ -1,14 +1,14 @@
-package Java1;
-
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import javax.swing.JOptionPane;
-
 /**
  * @author Luis Carlos de la Torre Cortes
  * @Seccion D03
  * @Tarea Java 1
  */
+package java1;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import javax.swing.JOptionPane;
+
 public class Encapsulamiento {
 	public static void main(String[] args) {
 		miFecha objeto = new miFecha();

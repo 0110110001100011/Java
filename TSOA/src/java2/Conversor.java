@@ -42,7 +42,7 @@ public class Conversor {
 	}
 	
 	public void imprimeBits(int e){
-		int test=0x80007FFF;
+		int test=0x80000000;
 		System.out.print("int: "+e+"\n");
 		System.out.print("| ");
 		for(int i=0;i<32;i++){
@@ -60,7 +60,7 @@ public class Conversor {
 	}
 	
 	public void imprimeBits(long l){
-		long test=(long)0x7FFFFFFFFFFFFFFFL;
+		long test=0x8000000000000000L;
 		System.out.print("long: "+l+"\n");
 		System.out.print("| ");
 		for(int i=0;i<64;i++){
@@ -82,7 +82,7 @@ public class Conversor {
 		byte miByte=(byte) 0x7F;
 		short miShort=(short) 0x7F08;
 		int miInt = 0x7F0F0F80;
-		long miLong = 0x7000000000000001L;
+		long miLong = 0x7F008800F1000081L;
 		
 		
 		miObjeto.imprimeBits(miByte);

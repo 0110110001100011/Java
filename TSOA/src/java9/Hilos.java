@@ -2,61 +2,56 @@ package java9;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JLabel;
-import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
-public class Hilos {
-	
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class Hilos extends JFrame {
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JPanel panel_izq;
+	private JPanel panel_principal;
+	private JScrollPane scrollPane_izq;
+	private JTextArea textArea_izq;
+	private JPanel panel_der;
+	private JScrollPane scrollPane_der;
+	private JTextArea textArea_der;
+	private JLabel lblHilo;
+	private JLabel lblHilo_1;
+	private JButton btnPausa;
+	private MiHilo hilo1, hilo2;
+	public boolean pausa;
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
-					Ventana frame = new Ventana();
-					frame.getTextArea_1().setEditable(false);
-					frame.getTextArea().setEditable(false);
+					Hilos frame = new Hilos();
 					frame.setVisible(true);
-
-					frame.nuevo("Hilo 1: ", 2,frame.getTextArea());
-					frame.nuevo("Hilo 2: ", 2,frame.getTextArea_1());
-
-
+					frame.hilo1 = new MiHilo(frame.textArea_izq, 2);
+					frame.hilo2 = new MiHilo(frame.textArea_der, 1);
+					frame.hilo1.start();
+					frame.hilo2.start();
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-
 		});
-
 	}
-}
 
-class Ventana extends JFrame {
-
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JPanel panel;
-	private JScrollPane scrollPane_1;
-	private JTextArea textArea;
-	private JLabel lblHilo;
-	private JScrollPane scrollPane;
-	private JTextArea textArea_1;
-	private JLabel lblHilo_1;
-	private JButton btnPausarreanudar;
-	private boolean pausa;
-
-	public Ventana() {
-		pausa = false;
+	public Hilos() {
+		setTitle("TSOAD03 - Java 9");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -64,105 +59,107 @@ class Ventana extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 
-		panel = new JPanel();
-		contentPane.add(panel);
-		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		panel_principal = new JPanel();
+		contentPane.add(panel_principal);
+		panel_principal.setLayout(new BoxLayout(panel_principal,
+				BoxLayout.X_AXIS));
 
-		scrollPane_1 = new JScrollPane();
-		panel.add(scrollPane_1);
+		panel_izq = new JPanel();
+		panel_principal.add(panel_izq);
+		panel_izq.setLayout(new BorderLayout(0, 0));
 
-		setTextArea(new JTextArea());
-		scrollPane_1.setViewportView(getTextArea());
+		scrollPane_izq = new JScrollPane();
+		panel_izq.add(scrollPane_izq, BorderLayout.CENTER);
+
+		textArea_izq = new JTextArea();
+		textArea_izq.setEditable(false);
+		scrollPane_izq.setViewportView(textArea_izq);
 
 		lblHilo = new JLabel("Hilo 1");
 		lblHilo.setHorizontalAlignment(SwingConstants.CENTER);
-		scrollPane_1.setColumnHeaderView(lblHilo);
+		scrollPane_izq.setColumnHeaderView(lblHilo);
 
-		scrollPane = new JScrollPane();
-		panel.add(scrollPane);
+		panel_der = new JPanel();
+		panel_principal.add(panel_der);
+		panel_der.setLayout(new BorderLayout(0, 0));
 
-		setTextArea_1(new JTextArea());
-		scrollPane.setViewportView(getTextArea_1());
+		scrollPane_der = new JScrollPane();
+		panel_der.add(scrollPane_der, BorderLayout.CENTER);
+
+		textArea_der = new JTextArea();
+		textArea_der.setEditable(false);
+		scrollPane_der.setViewportView(textArea_der);
 
 		lblHilo_1 = new JLabel("Hilo 2");
 		lblHilo_1.setHorizontalAlignment(SwingConstants.CENTER);
-		scrollPane.setColumnHeaderView(lblHilo_1);
+		scrollPane_der.setColumnHeaderView(lblHilo_1);
 
-		btnPausarreanudar = new JButton("Pausar/Reanudar");
-		btnPausarreanudar.addActionListener(new ActionListener() {
+		btnPausa = new JButton("Pausa");
+		pausa = false;
+		btnPausa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(pausa){
-					
+				if(hilo2.isA()){
+					hilo2.setA();
 				}
 				else{
-					
+					hilo2.espera();
 				}
 			}
+
 		});
+		contentPane.add(btnPausa, BorderLayout.SOUTH);
+	}
+}
+
+class MiHilo extends Thread {
+	JTextArea area;
+	int segundos;
+	private boolean a,b;
+	
+	public MiHilo(JTextArea area, int segundos) {
+		this.area=area;
+		this.segundos=segundos;
+		a=true;
+		b=true;
+	}
+
+	public synchronized void espera() {
+		if(b){
+			b=false;
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}else {
+			a=true;
+			b=a;
+			this.notify();
+		}
 		
-		contentPane.add(btnPausarreanudar, BorderLayout.SOUTH);
-
-
 	}
 
-	void imprime(JTextArea area, String mensaje) {
-		area.append(mensaje + "\n");
+	public boolean isA() {
+		return a;
 	}
 
-	public JTextArea getTextArea() {
-		return textArea;
+	public void setA() {
+		a = false;
 	}
 
-	public void setTextArea(JTextArea textArea) {
-		this.textArea = textArea;
-	}
-
-	public JTextArea getTextArea_1() {
-		return textArea_1;
-	}
-
-	public void setTextArea_1(JTextArea textArea_1) {
-		this.textArea_1 = textArea_1;
-	}
-	public void nuevo(final String string, final int seg, final JTextArea textArea) {
-		Runnable r = new Runnable() {
-			public void run() {
-				for (long contador = 0; true; contador++) {
-					imprime(textArea, string+contador);
-					try {
-						Thread.sleep(seg*1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				
+	public void run() {
+		for (int i = 0;; i++) {
+			if(!a){
+				espera();
 			}
-		};
-		Thread hilo = new Thread(r);
-		hilo.start();
-	}
-	public void nuevoPausa(final String string, final int seg, final JTextArea textArea) {
-		Runnable r = new Runnable() {
-			public void run() {
-				for (long contador = 0; true; contador++) {
-					try {
-						wait();
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					imprime(textArea, string+contador);
-					try {
-						Thread.sleep(seg*1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				
+			area.append(" " + i + "\n");
+			try {
+				Thread.sleep(segundos * 1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-		};
-		Thread hilo = new Thread(r);
-		hilo.start();
-	}
+		}
 
+	}
+	
 }

@@ -30,7 +30,6 @@ public class Hilos extends JFrame {
 	private JLabel lblHilo_1;
 	private JButton btnPausa;
 	private MiHilo hilo1, hilo2;
-	public boolean pausa;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -95,7 +94,6 @@ public class Hilos extends JFrame {
 		scrollPane_der.setColumnHeaderView(lblHilo_1);
 
 		btnPausa = new JButton("Pausa");
-		pausa = false;
 		btnPausa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(hilo2.isA()){

@@ -1,5 +1,9 @@
 package java9;
-
+/**
+ * @author Luis Carlos de la Torre Cortes
+ * @Seccion D03
+ * @Tarea Java 9
+ */
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -41,7 +45,7 @@ public class Hilos extends JFrame {
 					frame.hilo2 = new MiHilo(frame.textArea_der, 1);
 					frame.hilo1.start();
 					frame.hilo2.start();
-					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -96,11 +100,12 @@ public class Hilos extends JFrame {
 		btnPausa = new JButton("Pausa");
 		btnPausa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(hilo2.isA()){
-					hilo2.setA();
-				}
-				else{
-					hilo2.espera();
+				hilo2.setSwitchBoton(!hilo2.isSwitchBoton());
+				if(hilo2.isPausado()){
+					synchronized (hilo2) {
+						hilo2.notify();
+					}
+					
 				}
 			}
 
@@ -112,43 +117,50 @@ public class Hilos extends JFrame {
 class MiHilo extends Thread {
 	JTextArea area;
 	int segundos;
-	private boolean a,b;
-	
+	private boolean switchBoton, pausado;
+
 	public MiHilo(JTextArea area, int segundos) {
-		this.area=area;
-		this.segundos=segundos;
-		a=true;
-		b=true;
+		this.area = area;
+		this.segundos = segundos;
+		pausado = false;
+		switchBoton = false;
+	}
+
+	public boolean isSwitchBoton() {
+		return switchBoton;
+	}
+
+	public void setSwitchBoton(boolean switchBoton) {
+		this.switchBoton = switchBoton;
+	}
+
+	
+	public boolean isPausado() {
+		return pausado;
+	}
+
+	public void setPausado(boolean pausado) {
+		this.pausado = pausado;
 	}
 
 	public synchronized void espera() {
-		if(b){
-			b=false;
+		if (!pausado) {
 			try {
+				pausado = true;
 				this.wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}else {
-			a=true;
-			b=a;
-			this.notify();
+		}else{
+			pausado = false;
 		}
-		
-	}
-
-	public boolean isA() {
-		return a;
-	}
-
-	public void setA() {
-		a = false;
 	}
 
 	public void run() {
 		for (int i = 0;; i++) {
-			if(!a){
+			if(switchBoton){
 				espera();
+				setSwitchBoton(!isSwitchBoton());
 			}
 			area.append(" " + i + "\n");
 			try {
@@ -159,5 +171,5 @@ class MiHilo extends Thread {
 		}
 
 	}
-	
+
 }
